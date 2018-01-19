@@ -317,20 +317,22 @@ module.exports = function project( options ) {
         },
         function(cb){
           // web interface
-          seneca.act_if(options.web, {role:'web', use:{
-            prefix:options.prefix,
-            pin:{role:plugin,cmd:'*'},
-            map:{
-              'for_user': { GET:buildcontext },
-              'load':  { GET:buildcontext, alias:'load/:'+options.name },
-              'save':  { POST:buildcontext, data: true },
-              'start': { POST:buildcontext },
-              'stop':  { POST:buildcontext },
-
-              // legacy
-              'user_projects': { GET:buildcontext },
-            }
-          }}, cb)
+          if(options.web) {
+            seneca.act({role:'web', use:{
+              prefix:options.prefix,
+              pin:{role:plugin,cmd:'*'},
+              map:{
+                'for_user': { GET:buildcontext },
+                'load':  { GET:buildcontext, alias:'load/:'+options.name },
+                'save':  { POST:buildcontext, data: true },
+                'start': { POST:buildcontext },
+                'stop':  { POST:buildcontext },
+  
+                // legacy
+                'user_projects': { GET:buildcontext },
+              }
+            }}, cb)
+          }
         }],
       done
     )
